@@ -23,7 +23,7 @@ val CCCD_UUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 @Suppress("DEPRECATION")
 class BLEDeviceConnection @RequiresPermission("PERMISSION_BLUETOOTH_CONNECT") constructor(
     private val context: Context,
-    private val bluetoothDevice: BluetoothDevice
+    public val bluetoothDevice: BluetoothDevice
 ) {
     val isConnected = MutableStateFlow(false)
     val passwordRead = MutableStateFlow<String?>(null)

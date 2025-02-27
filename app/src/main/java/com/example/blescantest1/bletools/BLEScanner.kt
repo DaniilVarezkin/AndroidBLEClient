@@ -7,6 +7,7 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
 import androidx.annotation.RequiresPermission
+import com.example.blescantest1.datastore.DataStoreManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
@@ -56,7 +57,4 @@ class BLEScanner(context: Context) {
         scanner.stopScan(scanCallback)
         isScanning.value = false
     }
-
-
-
 }
