@@ -45,16 +45,16 @@ fun DeviceScreen(
         Button(onClick = discoverServices, enabled = isDeviceConnected) {
             Text("2. Discover Services")
         }
-        LazyColumn {
-            items(discoveredCharacteristics.keys.sorted()) { serviceUuid ->
-                Text(text = serviceUuid, fontWeight = FontWeight.Black)
-                Column(modifier = Modifier.padding(start = 10.dp)) {
-                    discoveredCharacteristics[serviceUuid]?.forEach {
-                        Text(it)
-                    }
-                }
-            }
-        }
+//        LazyColumn {
+//            items(discoveredCharacteristics.keys.sorted()) { serviceUuid ->
+//                Text(text = serviceUuid, fontWeight = FontWeight.Black)
+//                Column(modifier = Modifier.padding(start = 10.dp)) {
+//                    discoveredCharacteristics[serviceUuid]?.forEach {
+//                        Text(it)
+//                    }
+//                }
+//            }
+//        }
         Button(onClick = readData, enabled = isDeviceConnected && foundTargetService) {
             Text("3. Read data")
         }

@@ -110,16 +110,6 @@ class BLEClientViewModel(private val application: Application): AndroidViewModel
     }
 
     @RequiresPermission(PERMISSION_BLUETOOTH_CONNECT)
-    fun readPasswordFromActiveDevice() {
-        activeConnection.value?.readPassword()
-    }
-
-    @RequiresPermission(PERMISSION_BLUETOOTH_CONNECT)
-    fun writeNameToActiveDevice() {
-        activeConnection.value?.writeName()
-    }
-
-    @RequiresPermission(PERMISSION_BLUETOOTH_CONNECT)
     fun readDataFromActiveDevice() {
         activeConnection.value?.readStringData()
     }

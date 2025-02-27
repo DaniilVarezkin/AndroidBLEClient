@@ -1,5 +1,6 @@
 package com.example.blescantest1.screens
 
+import android.bluetooth.BluetoothClass.Device
 import android.bluetooth.BluetoothDevice
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +53,8 @@ fun ScanningScreen(
             items(foundDevices) { device ->
                 DeviceItem(
                     deviceName = device.name,
-                    selectDevice = { selectDevice(device) }
+                    selectDevice = { selectDevice(device) },
+                    device
                 )
             }
         }
@@ -60,7 +62,7 @@ fun ScanningScreen(
 }
 
 @Composable
-fun DeviceItem(deviceName: String?, selectDevice: () -> Unit) {
+fun DeviceItem(deviceName: String?, selectDevice: () -> Unit, device: BluetoothDevice) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -73,6 +75,12 @@ fun DeviceItem(deviceName: String?, selectDevice: () -> Unit) {
                 text = deviceName ?: "[Unnamed]",
                 textAlign = TextAlign.Center,
             )
+            Text(
+                text = """
+                    address: ${device.address}
+                """.trimIndent()
+            )
+
             Button(onClick = selectDevice) {
                 Text("Connect")
             }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,18 +37,26 @@ fun MainNavigation(viewModel: BLEClientViewModel = viewModel()) {
         mutableStateOf (permissionManager.haveAllPermissions(context))
     }
 
+
+
     if(!allPermissionsGranted){
+        val launcher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestMultiplePermissions()
+        ) { granted ->
+            if (granted.values.all { it }) {
+                allPermissionsGranted = true
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            launcher.launch(permissionManager.ALL_BLE_PERMISSIONS)
+        }
+
         Box {
             Column(
                 modifier = Modifier.align(Alignment.Center)
             ) {
-                val launcher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.RequestMultiplePermissions()
-                ) { granted ->
-                    if (granted.values.all { it }) {
-                        allPermissionsGranted = true
-                    }
-                }
+
                 Button(onClick = { launcher.launch(permissionManager.ALL_BLE_PERMISSIONS) }) {
                     Text("Grant Permission")
                 }
