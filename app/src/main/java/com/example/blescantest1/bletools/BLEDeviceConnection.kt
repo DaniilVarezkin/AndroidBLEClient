@@ -1,5 +1,6 @@
 package com.example.blescantest1.bletools
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
@@ -21,26 +22,26 @@ val CCCD_UUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 
 
 @Suppress("DEPRECATION")
-class BLEDeviceConnection @RequiresPermission("PERMISSION_BLUETOOTH_CONNECT") constructor(
+class BLEDeviceConnection @RequiresPermission(PERMISSION_BLUETOOTH_CONNECT) constructor(
     private val context: Context,
-    public val bluetoothDevice: BluetoothDevice
+    val bluetoothDevice: BluetoothDevice
 ) {
     val isConnected = MutableStateFlow(false)
-    val passwordRead = MutableStateFlow<String?>(null)
     val successfulWritesCount = MutableStateFlow(0)
     val services = MutableStateFlow<List<BluetoothGattService>>(emptyList())
-
-    //добавил от себя
     val customCharacteristicData = MutableStateFlow<String?>(null)
 
 
     private val callback = object: BluetoothGattCallback() {
+        @SuppressLint("MissingPermission")
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             super.onConnectionStateChange(gatt, status, newState)
             val connected = newState == BluetoothGatt.STATE_CONNECTED
             if (connected) {
-                //read the list of services
                 services.value = gatt.services
+                gatt.discoverServices()
+                Log.d("bluetooth1", "Discover Services in onConnectionStateChange ")
+
             }
             isConnected.value = connected
         }

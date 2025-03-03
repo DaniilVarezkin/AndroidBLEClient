@@ -21,28 +21,26 @@ import androidx.compose.ui.unit.dp
 
 import com.example.blescantest1.bletools.PERMISSION_BLUETOOTH_CONNECT
 import com.example.blescantest1.bletools.PERMISSION_BLUETOOTH_SCAN
+import com.example.blescantest1.viewmodels.BLEClientViewModel
 
 @RequiresPermission(allOf = [PERMISSION_BLUETOOTH_SCAN, PERMISSION_BLUETOOTH_CONNECT])
 @Composable
 fun ScanningScreen(
     isScanning: Boolean,
     foundDevices: List<BluetoothDevice>,
-    startScanning: () -> Unit,
-    stopScanning: () -> Unit,
-    selectDevice: (BluetoothDevice) -> Unit
+    viewModel: BLEClientViewModel
 ) {
-    Column (
+    Column(
         Modifier.padding(horizontal = 10.dp)
-    ){
+    ) {
         if (isScanning) {
             Text("Сканирование...")
 
-            Button(onClick = stopScanning) {
+            Button(onClick = viewModel::stopScanning) {
                 Text("Остановить сканирование")
             }
-        }
-        else {
-            Button(onClick = startScanning) {
+        } else {
+            Button(onClick = viewModel::startScanning) {
                 Text("Запустить сканирование")
             }
         }
@@ -53,7 +51,7 @@ fun ScanningScreen(
             items(foundDevices) { device ->
                 DeviceItem(
                     deviceName = device.name,
-                    selectDevice = { selectDevice(device) },
+                    selectDevice = { viewModel.setActiveDevice(device) },
                     device
                 )
             }
@@ -62,7 +60,11 @@ fun ScanningScreen(
 }
 
 @Composable
-fun DeviceItem(deviceName: String?, selectDevice: () -> Unit, device: BluetoothDevice) {
+fun DeviceItem(
+    deviceName: String?,
+    selectDevice: () -> Unit,
+    device: BluetoothDevice
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),

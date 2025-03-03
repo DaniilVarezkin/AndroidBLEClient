@@ -1,5 +1,6 @@
 package com.example.blescantest1.screens
 
+import android.text.BoringLayout
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
@@ -19,43 +20,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.blescantest1.bletools.CTF_SERVICE_UUID
+import com.example.blescantest1.viewmodels.BLEClientViewModel
 
 @Composable
 fun DeviceScreen(
-    unselectDevice: () -> Unit,
-    isDeviceConnected: Boolean,
-    discoveredCharacteristics: Map<String, List<String>>,
-    data: String?,
-    nameWrittenTimes: Int,
-    connect: () -> Unit,
-    discoverServices: () -> Unit,
-    readData: () -> Unit,
-    writeData: () -> Unit,
-    commandString: MutableState<String>
+   viewModel: BLEClientViewModel,
+   isConnected: Boolean,
+   isTargetServiceFound: Boolean,
+   data: String?,
+   commandString: MutableState<String>
 ) {
-    val foundTargetService = discoveredCharacteristics.contains(CTF_SERVICE_UUID.toString())
-
     Column(
         Modifier.scrollable(rememberScrollState(), Orientation.Vertical)
     ) {
-        Button(onClick = connect) {
+        Button(onClick = viewModel::connectActiveDevice) {
             Text("1. Соединится")
         }
-        Text("Device connected: $isDeviceConnected")
-        Button(onClick = discoverServices, enabled = isDeviceConnected) {
-            Text("2. Discover Services")
-        }
-//        LazyColumn {
-//            items(discoveredCharacteristics.keys.sorted()) { serviceUuid ->
-//                Text(text = serviceUuid, fontWeight = FontWeight.Black)
-//                Column(modifier = Modifier.padding(start = 10.dp)) {
-//                    discoveredCharacteristics[serviceUuid]?.forEach {
-//                        Text(it)
-//                    }
-//                }
-//            }
+        Text("Соединение установлено: $isConnected")
+        Text("Целевое устройство: $isTargetServiceFound")
+
+//        Button(onClick = viewModel::discoverServices, enabled = isConnected) {
+//            Text("2. Discover Services")
 //        }
-        Button(onClick = readData, enabled = isDeviceConnected && foundTargetService) {
+
+        Button(onClick = viewModel::readDataFromActiveDevice, enabled = isConnected && isTargetServiceFound) {
             Text("3. Read data")
         }
         if (data != null) {
@@ -63,14 +51,12 @@ fun DeviceScreen(
         }
 
         TextField(value = commandString.value, onValueChange = {commandString.value = it})
-        Button(onClick = writeData, enabled = isDeviceConnected && foundTargetService) {
+
+        Button(onClick = viewModel::writeDataToActiveDevice, enabled = isConnected && isTargetServiceFound) {
             Text("4. Send")
         }
-        if (nameWrittenTimes > 0) {
-            Text("Successful writes: $nameWrittenTimes")
-        }
 
-        OutlinedButton(modifier = Modifier.padding(top = 40.dp),  onClick = unselectDevice) {
+        OutlinedButton(modifier = Modifier.padding(top = 40.dp),  onClick = viewModel::disconnectActiveDevice) {
             Text("Disconnect")
         }
     }

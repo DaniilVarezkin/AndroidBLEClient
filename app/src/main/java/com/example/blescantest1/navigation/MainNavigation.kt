@@ -23,72 +23,40 @@ import com.example.blescantest1.viewmodels.BLEClientViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.blescantest1.screens.DeviceScreen
+import com.example.blescantest1.screens.PermissionScreen
 import com.example.blescantest1.screens.ScanningScreen
 
 @SuppressLint("MissingPermission")
 @Composable
 fun MainNavigation(viewModel: BLEClientViewModel = viewModel()) {
-    val permissionManager: PermissionManager = PermissionManager();
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     var allPermissionsGranted by remember {
-        mutableStateOf (permissionManager.haveAllPermissions(context))
+        mutableStateOf (PermissionManager.haveAllPermissions(context))
     }
 
 
 
     if(!allPermissionsGranted){
-        val launcher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.RequestMultiplePermissions()
-        ) { granted ->
-            if (granted.values.all { it }) {
-                allPermissionsGranted = true
-            }
-        }
-
-        LaunchedEffect(Unit) {
-            launcher.launch(permissionManager.ALL_BLE_PERMISSIONS)
-        }
-
-        Box {
-            Column(
-                modifier = Modifier.align(Alignment.Center)
-            ) {
-
-                Button(onClick = { launcher.launch(permissionManager.ALL_BLE_PERMISSIONS) }) {
-                    Text("Grant Permission")
-                }
-            }
+        PermissionScreen {
+            allPermissionsGranted = true
         }
     } else if(uiState.activeDevice == null) {
         ScanningScreen(
             isScanning = uiState.isScanning,
             foundDevices = uiState.foundDevices,
-            startScanning = viewModel::startScanning,
-            stopScanning = viewModel::stopScanning,
-            selectDevice = { device ->
-                viewModel.stopScanning()
-                viewModel.setActiveDevice(device)
-            }
+            viewModel
         )
     }
     else {
         DeviceScreen(
-            unselectDevice = {
-                viewModel.disconnectActiveDevice()
-                viewModel.setActiveDevice(null)
-            },
-            isDeviceConnected = uiState.isDeviceConnected,
-            discoveredCharacteristics = uiState.discoveredCharacteristics,
-            data = uiState.data,
-            nameWrittenTimes = uiState.nameWrittenTimes,
-            connect = viewModel::connectActiveDevice,
-            discoverServices = viewModel::discoverActiveDeviceServices,
-            readData = viewModel::readDataFromActiveDevice,
-            writeData = viewModel::writeDataFromActiveDevice,
-            commandString = viewModel.commandString
+            viewModel,
+            uiState.isDeviceConnected,
+            uiState.isTargetServiceFound,
+            uiState.data,
+            viewModel.commandString
         )
     }
 

@@ -7,8 +7,8 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
 import androidx.annotation.RequiresPermission
-import com.example.blescantest1.datastore.DataStoreManager
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 const val PERMISSION_BLUETOOTH_SCAN = "android.permission.BLUETOOTH_SCAN"
@@ -19,9 +19,11 @@ class BLEScanner(context: Context) {
             as? BluetoothManager
         ?: throw Exception("Bluetooth is not supported by this device")
 
-    val isScanning = MutableStateFlow(false)
+    private val _isScanning = MutableStateFlow(false)
+    val isScanning = _isScanning.asStateFlow()
 
-    val foundDevices = MutableStateFlow<List<BluetoothDevice>>(emptyList())
+    private val _foundDevices = MutableStateFlow<List<BluetoothDevice>>(emptyList())
+    val foundDevices = _foundDevices.asStateFlow()
 
     private val scanner: BluetoothLeScanner
         get() = bluetooth.adapter.bluetoothLeScanner
@@ -31,8 +33,8 @@ class BLEScanner(context: Context) {
             super.onScanResult(callbackType, result)
             result ?: return
 
-            if (!foundDevices.value.contains(result.device)) {
-                foundDevices.update { it + result.device }
+            if (!_foundDevices.value.contains(result.device)) {
+                _foundDevices.update { it + result.device }
             }
         }
 
@@ -42,19 +44,19 @@ class BLEScanner(context: Context) {
 
         override fun onScanFailed(errorCode: Int) {
             super.onScanFailed(errorCode)
-            isScanning.value = false
+            _isScanning.value = false
         }
     }
 
     @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
     fun startScanning() {
         scanner.startScan(scanCallback)
-        isScanning.value = true
+        _isScanning.value = true
     }
 
     @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
     fun stopScanning() {
         scanner.stopScan(scanCallback)
-        isScanning.value = false
+        _isScanning.value = false
     }
 }
