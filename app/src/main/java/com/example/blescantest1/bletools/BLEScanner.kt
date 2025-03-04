@@ -6,6 +6,7 @@ import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
+import android.util.Log
 import androidx.annotation.RequiresPermission
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +16,9 @@ const val PERMISSION_BLUETOOTH_SCAN = "android.permission.BLUETOOTH_SCAN"
 const val PERMISSION_BLUETOOTH_CONNECT = "android.permission.BLUETOOTH_CONNECT"
 
 class BLEScanner(context: Context) {
+
+    private val TAG = "BLEScanner"
+
     private val bluetooth = context.getSystemService(Context.BLUETOOTH_SERVICE)
             as? BluetoothManager
         ?: throw Exception("Bluetooth is not supported by this device")
@@ -35,6 +39,7 @@ class BLEScanner(context: Context) {
 
             if (!_foundDevices.value.contains(result.device)) {
                 _foundDevices.update { it + result.device }
+                Log.v(TAG, "scanCallback: onScanResult: found new device: ${result.device.address}")
             }
         }
 
@@ -45,6 +50,8 @@ class BLEScanner(context: Context) {
         override fun onScanFailed(errorCode: Int) {
             super.onScanFailed(errorCode)
             _isScanning.value = false
+
+            Log.v(TAG, "scanCallback: onScanFailed")
         }
     }
 
@@ -52,11 +59,15 @@ class BLEScanner(context: Context) {
     fun startScanning() {
         scanner.startScan(scanCallback)
         _isScanning.value = true
+
+        Log.v(TAG, "startScanning")
     }
 
     @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
     fun stopScanning() {
         scanner.stopScan(scanCallback)
         _isScanning.value = false
+
+        Log.v(TAG, "stopScanning")
     }
 }

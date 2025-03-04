@@ -22,7 +22,7 @@ class BLEAutoConnectHelper (
     private val context: Context,
     private val coroutineScope: CoroutineScope
 ) {
-    val TAG = "BLEAutoConnectHelper"
+    private val TAG = "BLEAutoConnectHelper"
 
     private val bleScanner = BLEScanner(context)
     private val dataStoreManager = DataStoreManager(context)
@@ -36,6 +36,8 @@ class BLEAutoConnectHelper (
 
     val isDeviceConnected = _activeDeviceConnection.flatMapLatest { it?.isConnected ?: flowOf(false) }
 
+    private var flagAutoConnect = true
+
     @RequiresPermission(allOf = [PERMISSION_BLUETOOTH_CONNECT, PERMISSION_BLUETOOTH_SCAN])
     suspend fun autoScanAndConnect() {
         Log.v(TAG, "Начало автоматического сканирования")
@@ -44,16 +46,21 @@ class BLEAutoConnectHelper (
         val lastDeviceAddress = dataStoreManager.lastDeviceAddress.firstOrNull()
 
         foundDevices.collect { devices ->
-            //TODO сделать что-то типо флага для того, чтобы не подключалось авоматически
-            val lastDevice = devices.firstOrNull { it.address == lastDeviceAddress }
-            if(lastDevice != null){
-                stopScanning()
-                setActiveDevice(lastDevice)
-                connectActiveDevice()
+            if(flagAutoConnect){
+                val lastDevice = devices.firstOrNull { it.address == lastDeviceAddress }
+                if(lastDevice != null){
+                    stopScanning()
+                    setActiveAndConnectDevice(lastDevice)
+                }
             }
         }
     }
 
+    @RequiresPermission(allOf = [PERMISSION_BLUETOOTH_CONNECT, PERMISSION_BLUETOOTH_SCAN])
+    fun setActiveAndConnectDevice(device: BluetoothDevice?){
+        setActiveDevice(device)
+        connectActiveDevice()
+    }
 
     @RequiresPermission(allOf = [PERMISSION_BLUETOOTH_CONNECT, PERMISSION_BLUETOOTH_SCAN])
     fun setActiveDevice(device: BluetoothDevice?){
@@ -63,8 +70,6 @@ class BLEAutoConnectHelper (
 
             if(device != null){
                 value = BLEDeviceConnection(context, device)
-                //TODO можно добавить и автоматическое соединение
-                //connectActiveDevice()
                 Log.v(TAG, "Установка активного устройства: ${device.name} : ${device.address}")
             } else {
                 Log.v(TAG, "Сброс активного устройства")
@@ -76,6 +81,7 @@ class BLEAutoConnectHelper (
     fun disconnectActiveDevice(){
         _activeDeviceConnection.value?.disconnect()
         _activeDeviceConnection.value = null
+        flagAutoConnect = false
         Log.v(TAG, "Сброс соединения с активым устройством")
     }
 

@@ -51,7 +51,7 @@ fun ScanningScreen(
             items(foundDevices) { device ->
                 DeviceItem(
                     deviceName = device.name,
-                    selectDevice = { viewModel.setActiveDevice(device) },
+                    selectDevice = { viewModel.setActiveAndConnectDevice(device) },
                     device
                 )
             }

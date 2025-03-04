@@ -26,6 +26,8 @@ class BLEDeviceConnection @RequiresPermission(PERMISSION_BLUETOOTH_CONNECT) cons
     private val context: Context,
     val bluetoothDevice: BluetoothDevice
 ) {
+    //TODO добавить тег для логов
+
     val isConnected = MutableStateFlow(false)
     val successfulWritesCount = MutableStateFlow(0)
     val services = MutableStateFlow<List<BluetoothGattService>>(emptyList())

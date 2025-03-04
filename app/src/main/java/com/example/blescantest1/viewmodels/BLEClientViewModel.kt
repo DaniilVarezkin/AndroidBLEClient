@@ -91,6 +91,10 @@ class BLEClientViewModel(private val application: Application) : AndroidViewMode
         bleAutoConnectHelper.connectActiveDevice()
     }
 
+    fun setActiveAndConnectDevice(device: BluetoothDevice){
+        bleAutoConnectHelper.setActiveAndConnectDevice(device)
+    }
+
     fun discoverServices(){
         bleAutoConnectHelper.discoverServices()
     }
@@ -110,7 +114,6 @@ class BLEClientViewModel(private val application: Application) : AndroidViewMode
     override fun onCleared() {
         super.onCleared()
 
-        //when the ViewModel dies, shut down the BLE client with it
         if (bleAutoConnectHelper.isScanning.value) {
             if (ActivityCompat.checkSelfPermission(
                     getApplication(),
@@ -120,6 +123,7 @@ class BLEClientViewModel(private val application: Application) : AndroidViewMode
                 bleAutoConnectHelper.stopScanning()
             }
         }
+        Log.d(TAG, "ViewModel очищена")
     }
 }
 
