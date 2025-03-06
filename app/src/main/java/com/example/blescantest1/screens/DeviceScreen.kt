@@ -20,44 +20,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.blescantest1.bletools.CTF_SERVICE_UUID
-import com.example.blescantest1.viewmodels.BLEClientViewModel
 
-@Composable
-fun DeviceScreen(
-   viewModel: BLEClientViewModel,
-   isConnected: Boolean,
-   isTargetServiceFound: Boolean,
-   data: String?,
-   commandString: MutableState<String>
-) {
-    Column(
-        Modifier.scrollable(rememberScrollState(), Orientation.Vertical)
-    ) {
-        Button(onClick = viewModel::connectActiveDevice) {
-            Text("1. Соединится")
-        }
-        Text("Соединение установлено: $isConnected")
-        Text("Целевое устройство: $isTargetServiceFound")
 
-//        Button(onClick = viewModel::discoverServices, enabled = isConnected) {
-//            Text("2. Discover Services")
+//@Composable
+//fun DeviceScreen(
+//   viewModel: BLEClientViewModel,
+//   isConnected: Boolean,
+//   isTargetServiceFound: Boolean,
+//   data: String?,
+//   commandString: MutableState<String>
+//) {
+//    Column(
+//        Modifier.scrollable(rememberScrollState(), Orientation.Vertical)
+//    ) {
+//        Button(onClick = viewModel::connectActiveDevice) {
+//            Text("1. Соединится")
 //        }
-
-        Button(onClick = viewModel::readDataFromActiveDevice, enabled = isConnected && isTargetServiceFound) {
-            Text("3. Read data")
-        }
-        if (data != null) {
-            Text("Found data: $data")
-        }
-
-        TextField(value = commandString.value, onValueChange = {commandString.value = it})
-
-        Button(onClick = viewModel::writeDataToActiveDevice, enabled = isConnected && isTargetServiceFound) {
-            Text("4. Send")
-        }
-
-        OutlinedButton(modifier = Modifier.padding(top = 40.dp),  onClick = viewModel::disconnectActiveDevice) {
-            Text("Disconnect")
-        }
-    }
-}
+//        Text("Соединение установлено: $isConnected")
+//        Text("Целевое устройство: $isTargetServiceFound")
+//
+////        Button(onClick = viewModel::discoverServices, enabled = isConnected) {
+////            Text("2. Discover Services")
+////        }
+//
+//        Button(onClick = viewModel::readDataFromActiveDevice, enabled = isConnected && isTargetServiceFound) {
+//            Text("3. Read data")
+//        }
+//        if (data != null) {
+//            Text("Found data: $data")
+//        }
+//
+//        TextField(value = commandString.value, onValueChange = {commandString.value = it})
+//
+//        Button(onClick = viewModel::writeDataToActiveDevice, enabled = isConnected && isTargetServiceFound) {
+//            Text("4. Send")
+//        }
+//
+//        OutlinedButton(modifier = Modifier.padding(top = 40.dp),  onClick = viewModel::disconnectActiveDevice) {
+//            Text("Disconnect")
+//        }
+//    }
+//}

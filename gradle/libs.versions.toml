@@ -12,6 +12,7 @@ composeBom = "2024.04.01"
 lifecycleRuntimeComposeAndroid = "2.8.7"
 hilt = "2.55"
 ksp = "2.0.0-1.0.22"
+hiltNavigation = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,6 +34,8 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
 hilt-android = {module = "com.google.dagger:hilt-android", version.ref = "hilt"}
 hilt-android-compiler = {module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt"}
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation"}
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
