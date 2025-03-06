@@ -32,6 +32,8 @@ class BLEScanner(context: Context) {
     private val scanner: BluetoothLeScanner
         get() = bluetooth.adapter.bluetoothLeScanner
 
+    //TODO Изменить на callBackFlow
+
     private val scanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
