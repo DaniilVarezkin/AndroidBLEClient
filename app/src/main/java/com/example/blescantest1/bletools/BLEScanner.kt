@@ -16,12 +16,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+import javax.inject.Singleton
 
 const val PERMISSION_BLUETOOTH_SCAN = "android.permission.BLUETOOTH_SCAN"
 const val PERMISSION_BLUETOOTH_CONNECT = "android.permission.BLUETOOTH_CONNECT"
 
 
-
+@Singleton
 class BLEScanner @Inject constructor(
     @ApplicationContext context: Context
 ) {
@@ -66,7 +67,10 @@ class BLEScanner @Inject constructor(
         _isScanning.value = true
         Log.i(TAG, "Сканирование начато, поток работает")
 
-        awaitClose {stopScan()}
+        awaitClose {
+            stopScan()
+            Log.i(TAG, "Сканирование остановлено в потоке")
+        }
     }
 
     @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
@@ -74,7 +78,7 @@ class BLEScanner @Inject constructor(
         scanCallback?.let {
             scanner.stopScan(it)
             _isScanning.value = false
-            Log.i(TAG, "Сканирование остановлено")
+            Log.v(TAG, "Сканирование остановлено")
         }
     }
 }

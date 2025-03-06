@@ -22,7 +22,7 @@ class DeviceListViewModel @Inject constructor(
     private val isScanningNow = deviceManager.isScanningNow
 
     fun startScan() {
-        deviceManager.startScanning(viewModelScope)
+        deviceManager.startScanning(viewModelScope, 5000)
     }
 
     @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)

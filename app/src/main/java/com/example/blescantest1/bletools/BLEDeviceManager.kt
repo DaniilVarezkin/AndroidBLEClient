@@ -10,8 +10,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
+import okio.Timeout
 import javax.inject.Inject
+import javax.inject.Singleton
 
+
+@Singleton
 class BLEDeviceManager @Inject constructor(
     private val bleScanner: BLEScanner
 ) {
@@ -24,26 +29,24 @@ class BLEDeviceManager @Inject constructor(
     private var isScanningStarted = false
     private var scanJob: Job? = null
 
-    fun startScanning(coroutineScope: CoroutineScope){
-        if(!isScanningStarted){
-            isScanningStarted = true
-
+    fun startScanning(coroutineScope: CoroutineScope, timeout: Long = 5000) {
+        if (!isScanningNow.value) {
             scanJob = coroutineScope.launch(Dispatchers.IO) {
-                bleScanner.foundDevicesFlow.collect { device ->
-                    _foundedDevices.update { it + device }
+                Log.v(TAG, "Запущено сканирование c таймаутом: $timeout ms")
+                withTimeout(timeout) {
+                    bleScanner.foundDevicesFlow.collect { device ->
+                        _foundedDevices.update { it + device }
+                    }
                 }
             }
-
-            Log.v(TAG, "Запущено сканирование в менеджере устройств")
         } else {
             Log.w(TAG, "Сканирование уже запущено")
         }
     }
 
     @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
-    fun stopScanning(){
+    fun stopScanning() {
         scanJob?.cancel()
         bleScanner.stopScan()
-        isScanningStarted = false
     }
 }
