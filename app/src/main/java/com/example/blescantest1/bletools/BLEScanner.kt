@@ -14,14 +14,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 const val PERMISSION_BLUETOOTH_SCAN = "android.permission.BLUETOOTH_SCAN"
 const val PERMISSION_BLUETOOTH_CONNECT = "android.permission.BLUETOOTH_CONNECT"
 
 
 
-class BLEScanner(context: Context) {
-
+class BLEScanner @Inject constructor(
+    context: Context
+) {
     private val TAG = "BLEScanner"
 
     private val bluetooth = context.getSystemService(Context.BLUETOOTH_SERVICE)
@@ -34,9 +36,11 @@ class BLEScanner(context: Context) {
     private val scanner: BluetoothLeScanner
         get() = bluetooth.adapter.bluetoothLeScanner
 
+    private var scanCallback: ScanCallback? = null
+
     @SuppressLint("MissingPermission")
-    private val foundDevicesFlow = callbackFlow<BluetoothDevice> {
-        val scanCallback = object : ScanCallback() {
+    val foundDevicesFlow = callbackFlow<BluetoothDevice> {
+        scanCallback = object : ScanCallback() {
             override fun onScanResult(callbackType: Int, result: ScanResult?) {
                 super.onScanResult(callbackType, result)
                 result ?: return
@@ -57,13 +61,19 @@ class BLEScanner(context: Context) {
             }
         }
 
-        Log.i(TAG, "Запуск сканирования")
         scanner.startScan(scanCallback)
         _isScanning.value = true
+        Log.i(TAG, "Сканирование начато, поток работает")
 
-        awaitClose {
-            scanner.stopScan(scanCallback)
+        awaitClose {stopScan()}
+    }
+
+    @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
+    fun stopScan(){
+        scanCallback?.let {
+            scanner.stopScan(it)
             _isScanning.value = false
+            Log.i(TAG, "Сканирование остановлено")
         }
     }
 }
