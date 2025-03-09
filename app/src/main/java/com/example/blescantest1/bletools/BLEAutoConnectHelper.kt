@@ -5,13 +5,15 @@ import android.content.Context
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.example.blescantest1.datastore.DataStoreManager
+import com.example.blescantest1.remotecontrol.data.bluetooth.BLEScanner
+import com.example.blescantest1.remotecontrol.data.bluetooth.PERMISSION_BLUETOOTH_CONNECT
+import com.example.blescantest1.remotecontrol.data.bluetooth.PERMISSION_BLUETOOTH_SCAN
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,4 +1,4 @@
-package com.example.blescantest1.bletools
+package com.example.blescantest1.remotecontrol.data.bluetooth
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
@@ -14,7 +14,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 import javax.inject.Singleton
 

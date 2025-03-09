@@ -3,6 +3,8 @@ package com.example.blescantest1.bletools
 import android.bluetooth.BluetoothDevice
 import android.util.Log
 import androidx.annotation.RequiresPermission
+import com.example.blescantest1.remotecontrol.data.bluetooth.BLEScanner
+import com.example.blescantest1.remotecontrol.data.bluetooth.PERMISSION_BLUETOOTH_SCAN
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
