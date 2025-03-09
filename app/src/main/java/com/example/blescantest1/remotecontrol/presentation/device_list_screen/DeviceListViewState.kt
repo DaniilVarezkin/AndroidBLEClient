@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothDevice
 import java.lang.Error
 
 data class DeviceListViewState (
-    val isLoading: Boolean = false,
+    val isScanning: Boolean = false,
     val devices: List<BluetoothDevice> = emptyList(),
     val error: String? = null
 )

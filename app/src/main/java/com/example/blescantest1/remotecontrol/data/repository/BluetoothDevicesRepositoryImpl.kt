@@ -9,51 +9,59 @@ import com.example.blescantest1.remotecontrol.data.bluetooth.PERMISSION_BLUETOOT
 import com.example.blescantest1.remotecontrol.data.mapper.toBluetoohtError
 import com.example.blescantest1.remotecontrol.domain.model.BluetoothError
 import com.example.blescantest1.remotecontrol.domain.repository.BluetoothDevicesRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
 class BluetoothDevicesRepositoryImpl @Inject constructor(
-    private val scanner: BLEScanner
+    private val externalScope: CoroutineScope,
+    private val scanner: BLEScanner,
 ) : BluetoothDevicesRepository {
 
     private val _foundedDevicesMap = MutableStateFlow(emptyMap<String, BluetoothDevice>())
     private var collectDevicesJob: Job? = null
 
-    override fun getFoundedDevicesFlow(): Either<BluetoothError, Flow<List<BluetoothDevice>>> {
-        return Either.catch {
-            _foundedDevicesMap.map { it.values.toList() }
-        }
-            .mapLeft { it.toBluetoohtError() }
+    override fun getFoundedDevicesFlow(): Flow<List<BluetoothDevice>> {
+        return _foundedDevicesMap.map { it.values.toList() }
     }
 
-
-
     @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
-    override suspend fun startScanning() {
+    override fun startScanning() {
+        _foundedDevicesMap.value = emptyMap()
         scanner.startScanning()
-        collectDevices()
+        collectDevicesJob?.cancel()
+        collectDevicesJob = collectDevices()
     }
 
     @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
-    override suspend fun stopScanning() {
+    override fun stopScanning() {
         scanner.stopScanning()
+        collectDevicesJob?.cancel()
     }
 
+    override fun getScanningState(): StateFlow<Boolean> {
+        return scanner.isScanning
+    }
 
-    private suspend fun collectDevices(){
-        scanner.foundDeviceFlow
-            .filter { device -> !_foundedDevicesMap.value.containsKey(device.address) }
-            .collect { device ->
-                _foundedDevicesMap.update { it + (device.address to device) }
-            }
+    private fun collectDevices(): Job {
+        return externalScope.launch {
+            scanner.foundDeviceFlow
+                .filter { device -> !_foundedDevicesMap.value.containsKey(device.address) }
+                .collect { device ->
+                    _foundedDevicesMap.update { it + (device.address to device) }
+                }
+        }
     }
 }

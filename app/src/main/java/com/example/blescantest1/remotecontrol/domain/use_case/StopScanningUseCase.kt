@@ -4,7 +4,8 @@ import com.example.blescantest1.remotecontrol.domain.repository.BluetoothDevices
 import javax.inject.Inject
 
 class StopScanningUseCase @Inject constructor(private val bluetoothRepository: BluetoothDevicesRepository) {
-    suspend operator fun  invoke() {
+
+    operator fun invoke() {
         bluetoothRepository.stopScanning()
     }
 }

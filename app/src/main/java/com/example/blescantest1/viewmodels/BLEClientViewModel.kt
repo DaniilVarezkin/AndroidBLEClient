@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.blescantest1.bletools.BLEAutoConnectHelper
 import com.example.blescantest1.bletools.BLEDataTransferHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

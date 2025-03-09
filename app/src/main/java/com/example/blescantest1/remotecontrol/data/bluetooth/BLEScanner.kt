@@ -8,16 +8,18 @@ import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.util.Log
 import androidx.annotation.RequiresPermission
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import javax.inject.Inject
 
 const val PERMISSION_BLUETOOTH_SCAN = "android.permission.BLUETOOTH_SCAN"
 const val PERMISSION_BLUETOOTH_CONNECT = "android.permission.BLUETOOTH_CONNECT"
 
 
-class BLEScanner(context: Context) {
+class BLEScanner @Inject constructor(@ApplicationContext context: Context) {
 
     private val TAG = "BLEScanner"
 
@@ -40,6 +42,8 @@ class BLEScanner(context: Context) {
             result ?: return
 
             _foundDeviceChannel.trySend(result.device)
+            Log.v(TAG, "Найдено устройство ${result.device.address}")
+
         }
 
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
@@ -59,7 +63,7 @@ class BLEScanner(context: Context) {
         scanner.startScan(scanCallback)
         _isScanning.value = true
 
-        Log.v(TAG, "startScanning")
+        Log.i(TAG, "startScanning")
     }
 
     @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
@@ -67,6 +71,6 @@ class BLEScanner(context: Context) {
         scanner.stopScan(scanCallback)
         _isScanning.value = false
 
-        Log.v(TAG, "stopScanning")
+        Log.i(TAG, "stopScanning")
     }
 }

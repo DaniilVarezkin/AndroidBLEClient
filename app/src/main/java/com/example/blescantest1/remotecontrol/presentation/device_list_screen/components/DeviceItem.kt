@@ -18,14 +18,13 @@ import com.example.blescantest1.remotecontrol.data.bluetooth.PERMISSION_BLUETOOT
 @RequiresPermission(PERMISSION_BLUETOOTH_CONNECT)
 @Composable
 fun DeviceItem(
+    device: BluetoothDevice,
     modifier: Modifier = Modifier,
-    device: BluetoothDevice
 ) {
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(modifier = Modifier.padding(15.dp)) {
             Text(text = device.name ?: "[Unnamed]", style = MaterialTheme.typography.titleMedium)
