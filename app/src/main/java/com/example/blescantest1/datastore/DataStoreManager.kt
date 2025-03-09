@@ -8,11 +8,16 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
 // At the top level of your kotlin file:
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-class DataStoreManager(private val context: Context) {
+@Singleton
+class DataStoreManager @Inject constructor(
+    private val context: Context
+) {
     companion object {
         private val LAST_DEVICE_KEY = stringPreferencesKey("last_device_key")
     }
