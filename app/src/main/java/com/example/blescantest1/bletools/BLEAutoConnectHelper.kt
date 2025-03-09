@@ -13,12 +13,17 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
+import javax.inject.Inject
+import javax.inject.Singleton
 
+
+@Singleton
 @OptIn(ExperimentalCoroutinesApi::class)
-class BLEAutoConnectHelper(
+class BLEAutoConnectHelper @Inject constructor(
     private val context: Context,
-    private val bleScanner: BLEScanner,
-    private val dataStoreManager: DataStoreManager
+    private val deviceManager: BLEDeviceManager,
+    private val dataStoreManager: DataStoreManager,
+    private val bleScanner: BLEScanner
 ) {
     private val TAG = "BLEAutoConnectHelper"
 

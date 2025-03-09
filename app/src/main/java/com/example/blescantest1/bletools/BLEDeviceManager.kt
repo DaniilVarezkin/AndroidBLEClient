@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
-import okio.Timeout
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,7 +25,6 @@ class BLEDeviceManager @Inject constructor(
     val foundedDevices = _foundedDevices.asStateFlow()
     val isScanningNow = bleScanner.isScanning
 
-    private var isScanningStarted = false
     private var scanJob: Job? = null
 
     fun startScanning(coroutineScope: CoroutineScope, timeout: Long = 5000) {

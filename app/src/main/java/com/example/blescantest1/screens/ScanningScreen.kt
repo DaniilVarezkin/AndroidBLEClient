@@ -60,7 +60,7 @@ fun ScanningScreenContent(
             items(uiState.value.devices) { device ->
                 DeviceItem(
                     deviceName = device.name,
-                    selectDevice = { },
+                    selectDevice = { viewModel.connectDevice(device) },
                     device
                 )
             }

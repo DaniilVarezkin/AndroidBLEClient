@@ -2,6 +2,7 @@ package com.example.blescantest1.viewmodels
 
 import android.bluetooth.BluetoothDevice
 import androidx.annotation.RequiresPermission
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.blescantest1.bletools.BLEDeviceManager
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DeviceListViewModel @Inject constructor(
-    private val deviceManager: BLEDeviceManager
+    private val deviceManager: BLEDeviceManager,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val foundedDevices = deviceManager.foundedDevices
@@ -28,6 +30,10 @@ class DeviceListViewModel @Inject constructor(
     @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
     fun stopScan() {
         deviceManager.stopScanning()
+    }
+
+    fun connectDevice(device: BluetoothDevice){
+        savedStateHandle["active_device_address"] = device.address
     }
 
     private val _uiState = MutableStateFlow(DeviceListUIState())
