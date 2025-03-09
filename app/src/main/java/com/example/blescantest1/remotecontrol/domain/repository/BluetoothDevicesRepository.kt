@@ -6,5 +6,7 @@ import com.example.blescantest1.remotecontrol.domain.model.BluetoothError
 import kotlinx.coroutines.flow.Flow
 
 interface BluetoothDevicesRepository {
-    suspend fun getFoundDevicesFlow() : Either<BluetoothError, Flow<BluetoothDevice>>
+    fun getFoundedDevicesFlow() : Either<BluetoothError, Flow<List<BluetoothDevice>>>
+    suspend fun startScanning()
+    suspend fun stopScanning()
 }
