@@ -1,14 +1,12 @@
 package com.example.blescantest1.remotecontrol.data.repository
 
 import android.bluetooth.BluetoothDevice
+import android.provider.SyncStateContract.Constants
 import androidx.annotation.RequiresPermission
 import arrow.core.Either
 import com.example.blescantest1.remotecontrol.data.bluetooth.BLEScanner
-import com.example.blescantest1.remotecontrol.data.bluetooth.PERMISSION_BLUETOOTH_CONNECT
-import com.example.blescantest1.remotecontrol.data.bluetooth.PERMISSION_BLUETOOTH_SCAN
-import com.example.blescantest1.remotecontrol.data.mapper.toBluetoohtError
-import com.example.blescantest1.remotecontrol.domain.model.BluetoothError
 import com.example.blescantest1.remotecontrol.domain.repository.BluetoothDevicesRepository
+import com.example.blescantest1.util.constants.PermissionConstants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -37,7 +35,7 @@ class BluetoothDevicesRepositoryImpl @Inject constructor(
         return _foundedDevicesMap.map { it.values.toList() }
     }
 
-    @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
+    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_SCAN)
     override fun startScanning() {
         _foundedDevicesMap.value = emptyMap()
         scanner.startScanning()
@@ -45,7 +43,7 @@ class BluetoothDevicesRepositoryImpl @Inject constructor(
         collectDevicesJob = collectDevices()
     }
 
-    @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
+    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_SCAN)
     override fun stopScanning() {
         scanner.stopScanning()
         collectDevicesJob?.cancel()

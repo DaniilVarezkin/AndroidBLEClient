@@ -1,7 +1,6 @@
-package com.example.blescantest1.remotecontrol.presentation.device_list_screen
+package com.example.blescantest1.remotecontrol.presentation.device_list
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,10 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.blescantest1.remotecontrol.presentation.device_list_screen.components.DeviceItem
-import com.example.blescantest1.remotecontrol.presentation.util.components.LoadingDialog
+import com.example.blescantest1.remotecontrol.presentation.device_list.components.DeviceItem
 import com.example.blescantest1.remotecontrol.presentation.util.components.MyTopBar
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 
 @Composable

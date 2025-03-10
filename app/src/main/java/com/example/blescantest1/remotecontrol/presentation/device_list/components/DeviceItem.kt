@@ -1,4 +1,4 @@
-package com.example.blescantest1.remotecontrol.presentation.device_list_screen.components
+package com.example.blescantest1.remotecontrol.presentation.device_list.components
 
 import android.bluetooth.BluetoothDevice
 import androidx.annotation.RequiresPermission
@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.blescantest1.remotecontrol.data.bluetooth.PERMISSION_BLUETOOTH_CONNECT
 

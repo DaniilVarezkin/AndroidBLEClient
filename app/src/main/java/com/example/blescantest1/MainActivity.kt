@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.blescantest1.navigation.MainNavigation
-import com.example.blescantest1.remotecontrol.presentation.device_list_screen.DeviceListScreen
 import com.example.blescantest1.ui.theme.BleScanTest1Theme
 import dagger.hilt.android.AndroidEntryPoint
 

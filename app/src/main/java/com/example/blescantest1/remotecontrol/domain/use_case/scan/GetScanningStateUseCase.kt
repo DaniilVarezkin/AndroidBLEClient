@@ -1,4 +1,4 @@
-package com.example.blescantest1.remotecontrol.domain.use_case
+package com.example.blescantest1.remotecontrol.domain.use_case.scan
 
 import com.example.blescantest1.remotecontrol.domain.repository.BluetoothDevicesRepository
 import kotlinx.coroutines.flow.StateFlow

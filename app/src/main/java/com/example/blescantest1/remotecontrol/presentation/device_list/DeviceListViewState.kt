@@ -1,7 +1,6 @@
-package com.example.blescantest1.remotecontrol.presentation.device_list_screen
+package com.example.blescantest1.remotecontrol.presentation.device_list
 
 import android.bluetooth.BluetoothDevice
-import java.lang.Error
 
 data class DeviceListViewState (
     val isScanning: Boolean = false,

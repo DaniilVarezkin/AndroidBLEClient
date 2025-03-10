@@ -15,8 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
-const val PERMISSION_BLUETOOTH_SCAN = "android.permission.BLUETOOTH_SCAN"
-const val PERMISSION_BLUETOOTH_CONNECT = "android.permission.BLUETOOTH_CONNECT"
 
 
 class BLEScanner @Inject constructor(@ApplicationContext context: Context) {

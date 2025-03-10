@@ -1,8 +1,6 @@
-package com.example.blescantest1.remotecontrol.domain.use_case
+package com.example.blescantest1.remotecontrol.domain.use_case.scan
 
 import android.bluetooth.BluetoothDevice
-import arrow.core.Either
-import com.example.blescantest1.remotecontrol.domain.model.BluetoothError
 import com.example.blescantest1.remotecontrol.domain.repository.BluetoothDevicesRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
