@@ -1,5 +1,6 @@
 package com.example.blescantest1.remotecontrol.presentation.device_list.components
 
+import android.Manifest
 import android.bluetooth.BluetoothDevice
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Column
@@ -12,9 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.blescantest1.remotecontrol.data.bluetooth.PERMISSION_BLUETOOTH_CONNECT
 
-@RequiresPermission(PERMISSION_BLUETOOTH_CONNECT)
+
+@RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
 @Composable
 fun DeviceItem(
     device: BluetoothDevice,

@@ -1,5 +1,6 @@
 package com.example.blescantest1.remotecontrol.data.bluetooth
 
+import android.Manifest
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.BluetoothLeScanner
@@ -8,6 +9,8 @@ import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.util.Log
 import androidx.annotation.RequiresPermission
+import com.example.blescantest1.util.constants.BluetoothConstants
+import com.example.blescantest1.util.constants.PermissionConstants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,7 +59,7 @@ class BLEScanner @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
-    @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
+    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     fun startScanning() {
         scanner.startScan(scanCallback)
         _isScanning.value = true
@@ -64,7 +67,7 @@ class BLEScanner @Inject constructor(@ApplicationContext context: Context) {
         Log.i(TAG, "startScanning")
     }
 
-    @RequiresPermission(PERMISSION_BLUETOOTH_SCAN)
+    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     fun stopScanning() {
         scanner.stopScan(scanCallback)
         _isScanning.value = false
