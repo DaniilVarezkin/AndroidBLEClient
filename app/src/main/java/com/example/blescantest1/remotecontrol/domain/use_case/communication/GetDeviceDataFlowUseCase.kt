@@ -12,6 +12,7 @@ class GetDeviceDataFlowUseCase @Inject constructor(
     private val communicationRepository: BluetoothCommunicationRepository,
     private val connectionRepository: BluetoothConnectionRepository
 ) {
+    //TODO Убрать connectionRepository и получать BLEDeviceConnection как параметр?
     operator fun invoke() : Flow<String?> {
         val connection = connectionRepository.getDeviceConnection()
         if(connection != null && connection.isConnected.value){

@@ -6,9 +6,9 @@ import com.example.blescantest1.remotecontrol.domain.use_case.scan.StartScanning
 import com.example.blescantest1.remotecontrol.domain.use_case.scan.StopScanningUseCase
 import javax.inject.Inject
 
-data class BluetoothScanUseCases @Inject constructor (
-    val startScanning: StartScanningUseCase,
-    val stopScanning: StopScanningUseCase,
-    val getDeviceFlow: GetFoundDeviceFlow,
-    val getScanningState: GetScanningStateUseCase,
-)
+//data class BluetoothScanUseCases @Inject constructor (
+//    val startScanning: StartScanningUseCase,
+//    val stopScanning: StopScanningUseCase,
+//    val getDeviceFlow: GetFoundDeviceFlow,
+//    val getScanningState: GetScanningStateUseCase,
+//)

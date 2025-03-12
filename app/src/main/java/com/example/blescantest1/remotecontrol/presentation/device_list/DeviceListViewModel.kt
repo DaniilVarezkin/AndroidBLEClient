@@ -2,6 +2,7 @@ package com.example.blescantest1.remotecontrol.presentation.device_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.blescantest1.remotecontrol.domain.repository.BluetoothDevicesRepository
 import com.example.blescantest1.remotecontrol.domain.use_case.BluetoothScanUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DeviceListViewModel @Inject constructor(
-    private val bluetoothUseCases: BluetoothScanUseCases
+    private val devicesRepository: BluetoothDevicesRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DeviceListViewState())
@@ -26,18 +27,18 @@ class DeviceListViewModel @Inject constructor(
     }
 
     fun startScanning() {
-        bluetoothUseCases.startScanning()
+        devicesRepository.startScanning()
     }
 
     fun stopScanning() {
-        bluetoothUseCases.stopScanning()
+        devicesRepository.stopScanning()
     }
 
     private fun observeState() {
         viewModelScope.launch {
             combine(
-                bluetoothUseCases.getScanningState(),
-                bluetoothUseCases.getDeviceFlow()
+                devicesRepository.getScanningState(),
+                devicesRepository.getFoundedDevicesFlow()
             ) { isScanning, devices ->
                 _state.update {
                     it.copy(
