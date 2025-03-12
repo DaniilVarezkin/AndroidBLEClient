@@ -1,21 +1,5 @@
 package com.example.blescantest1.bletools
 
-import android.bluetooth.BluetoothDevice
-import android.content.Context
-import android.util.Log
-import androidx.annotation.RequiresPermission
-import com.example.blescantest1.datastore.DataStoreManager
-import com.example.blescantest1.remotecontrol.data.bluetooth.BLEScanner
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.withTimeoutOrNull
-import javax.inject.Inject
-import javax.inject.Singleton
-
 
 //@Singleton
 //@OptIn(ExperimentalCoroutinesApi::class)

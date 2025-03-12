@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import com.example.blescantest1.permissions.PermissionManager
+import com.example.blescantest1.remotecontrol.presentation.util.permissions.PermissionManager
 import com.example.blescantest1.remotecontrol.presentation.device_list.DeviceListScreen
 import com.example.blescantest1.screens.PermissionScreen
 

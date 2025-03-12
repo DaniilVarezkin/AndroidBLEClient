@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 
-@RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
+@RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
 @Composable
 fun DeviceItem(
     device: BluetoothDevice,

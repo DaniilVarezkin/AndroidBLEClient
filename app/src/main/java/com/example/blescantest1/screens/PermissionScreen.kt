@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.blescantest1.permissions.PermissionManager
+import com.example.blescantest1.remotecontrol.presentation.util.permissions.PermissionManager
 
 @Composable
 fun PermissionScreen(

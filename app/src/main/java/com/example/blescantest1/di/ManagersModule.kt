@@ -10,9 +10,9 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-abstract class RepositoryModule {
+abstract class ManagersModule {
     @Binds
     @Singleton
-    abstract fun bindBluetoothDevicesRepository(impl: BluetoothScanManagerImpl) : BluetoothScanManager
+    abstract fun bindBluetoothScanManager(impl: BluetoothScanManagerImpl) : BluetoothScanManager
 
 }
