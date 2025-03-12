@@ -1,13 +1,10 @@
-package com.example.blescantest1.remotecontrol.domain.repository
+package com.example.blescantest1.remotecontrol.domain.manager
 
 import android.bluetooth.BluetoothDevice
-import arrow.core.Either
-import com.example.blescantest1.remotecontrol.domain.model.BluetoothError
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
-interface BluetoothDevicesRepository {
+interface BluetoothScanManager {
     fun getFoundedDevicesFlow() : Flow<List<BluetoothDevice>>
     fun startScanning()
     fun stopScanning()

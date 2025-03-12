@@ -1,9 +1,9 @@
 package com.example.blescantest1.remotecontrol.domain.use_case.scan
 
-import com.example.blescantest1.remotecontrol.domain.repository.BluetoothDevicesRepository
+import com.example.blescantest1.remotecontrol.domain.manager.BluetoothScanManager
 import javax.inject.Inject
 
-class StopScanningUseCase @Inject constructor(private val bluetoothRepository: BluetoothDevicesRepository) {
+class StopScanningUseCase @Inject constructor(private val bluetoothRepository: BluetoothScanManager) {
 
     operator fun invoke() {
         bluetoothRepository.stopScanning()

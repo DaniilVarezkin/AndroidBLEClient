@@ -1,7 +1,7 @@
 package com.example.blescantest1.di
 
-import com.example.blescantest1.remotecontrol.data.repository.BluetoothDevicesRepositoryImpl
-import com.example.blescantest1.remotecontrol.domain.repository.BluetoothDevicesRepository
+import com.example.blescantest1.remotecontrol.data.manager.BluetoothScanManagerImpl
+import com.example.blescantest1.remotecontrol.domain.manager.BluetoothScanManager
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,6 +13,6 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindBluetoothDevicesRepository(impl: BluetoothDevicesRepositoryImpl) : BluetoothDevicesRepository
+    abstract fun bindBluetoothDevicesRepository(impl: BluetoothScanManagerImpl) : BluetoothScanManager
 
 }

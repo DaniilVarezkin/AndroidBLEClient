@@ -1,11 +1,11 @@
-package com.example.blescantest1.remotecontrol.data.repository
+package com.example.blescantest1.remotecontrol.data.manager
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import androidx.annotation.RequiresPermission
 import com.example.blescantest1.remotecontrol.data.bluetooth.BLEDeviceConnectionImpl
 import com.example.blescantest1.remotecontrol.domain.model.BLEDeviceConnection
-import com.example.blescantest1.remotecontrol.domain.repository.BluetoothConnectionRepository
+import com.example.blescantest1.remotecontrol.domain.manager.BluetoothConnectionManager
 import com.example.blescantest1.util.constants.PermissionConstants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-class BluetoothConnectionRepositoryImpl @Inject constructor(
+class BluetoothConnectionManagerImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-) : BluetoothConnectionRepository {
+) : BluetoothConnectionManager {
 
     private val deviceConnection = MutableStateFlow<BLEDeviceConnection?>(null)
 

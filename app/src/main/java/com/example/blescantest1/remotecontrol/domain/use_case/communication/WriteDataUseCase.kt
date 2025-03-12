@@ -1,14 +1,13 @@
 package com.example.blescantest1.remotecontrol.domain.use_case.communication
 
 import android.util.Log
-import com.example.blescantest1.remotecontrol.domain.repository.BluetoothCommunicationRepository
-import com.example.blescantest1.remotecontrol.domain.repository.BluetoothConnectionRepository
-import kotlinx.coroutines.flow.firstOrNull
+import com.example.blescantest1.remotecontrol.domain.manager.BluetoothCommunicationManager
+import com.example.blescantest1.remotecontrol.domain.manager.BluetoothConnectionManager
 import javax.inject.Inject
 
 class WriteDataUseCase @Inject constructor(
-    private val communicationRepository: BluetoothCommunicationRepository,
-    private val connectionRepository: BluetoothConnectionRepository
+    private val communicationRepository: BluetoothCommunicationManager,
+    private val connectionRepository: BluetoothConnectionManager
 ) {
     //TODO Убрать connectionRepository и получать BLEDeviceConnection как параметр?
     operator fun invoke(stringData: String){

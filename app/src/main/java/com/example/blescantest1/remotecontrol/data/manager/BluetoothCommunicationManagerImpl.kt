@@ -1,11 +1,11 @@
-package com.example.blescantest1.remotecontrol.data.repository
+package com.example.blescantest1.remotecontrol.data.manager
 
 import com.example.blescantest1.remotecontrol.domain.model.BLEDeviceConnection
-import com.example.blescantest1.remotecontrol.domain.repository.BluetoothCommunicationRepository
+import com.example.blescantest1.remotecontrol.domain.manager.BluetoothCommunicationManager
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
-class BluetoothCommunicationRepositoryImpl @Inject constructor() : BluetoothCommunicationRepository {
+class BluetoothCommunicationManagerImpl @Inject constructor() : BluetoothCommunicationManager {
     override fun writeData(connection: BLEDeviceConnection, data: ByteArray) {
         if(connection.isConnected.value){
             connection.writeData(data)

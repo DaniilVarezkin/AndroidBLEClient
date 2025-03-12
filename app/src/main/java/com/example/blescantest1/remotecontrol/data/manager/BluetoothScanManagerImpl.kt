@@ -1,16 +1,12 @@
-package com.example.blescantest1.remotecontrol.data.repository
+package com.example.blescantest1.remotecontrol.data.manager
 
 import android.bluetooth.BluetoothDevice
-import android.provider.SyncStateContract.Constants
 import androidx.annotation.RequiresPermission
-import arrow.core.Either
 import com.example.blescantest1.remotecontrol.data.bluetooth.BLEScanner
-import com.example.blescantest1.remotecontrol.domain.repository.BluetoothDevicesRepository
+import com.example.blescantest1.remotecontrol.domain.manager.BluetoothScanManager
 import com.example.blescantest1.util.constants.PermissionConstants
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,10 +19,10 @@ import javax.inject.Singleton
 
 
 @Singleton
-class BluetoothDevicesRepositoryImpl @Inject constructor(
+class BluetoothScanManagerImpl @Inject constructor(
     private val externalScope: CoroutineScope,
     private val scanner: BLEScanner,
-) : BluetoothDevicesRepository {
+) : BluetoothScanManager {
 
     private val _foundedDevicesMap = MutableStateFlow(emptyMap<String, BluetoothDevice>())
     private var collectDevicesJob: Job? = null
