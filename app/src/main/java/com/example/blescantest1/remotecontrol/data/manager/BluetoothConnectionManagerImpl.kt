@@ -2,6 +2,7 @@ package com.example.blescantest1.remotecontrol.data.manager
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
+import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.example.blescantest1.remotecontrol.data.bluetooth.BLEDeviceConnectionImpl
 import com.example.blescantest1.remotecontrol.domain.model.BLEDeviceConnection
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class BluetoothConnectionManagerImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : BluetoothConnectionManager {
+    private val tag = "BluetoothConnectionManager"
 
     private val deviceConnection = MutableStateFlow<BLEDeviceConnection?>(null)
 
@@ -28,6 +30,7 @@ class BluetoothConnectionManagerImpl @Inject constructor(
             it?.disconnect()
             newConnection
         }
+        Log.i(tag, "Соединение с устройством: ${device.address}")
         return deviceConnection.asStateFlow()
     }
 

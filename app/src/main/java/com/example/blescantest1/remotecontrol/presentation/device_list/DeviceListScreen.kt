@@ -1,6 +1,7 @@
 package com.example.blescantest1.remotecontrol.presentation.device_list
 
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothDevice
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,7 +31,12 @@ internal fun DeviceListScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    DeviceListScreenContent(state, viewModel::startScanning, viewModel::stopScanning)
+    DeviceListScreenContent(
+        state,
+        viewModel::startScanning,
+        viewModel::stopScanning,
+        viewModel::connectDevice
+    )
 }
 
 @SuppressLint("MissingPermission")
@@ -38,17 +44,20 @@ internal fun DeviceListScreen(
 fun DeviceListScreenContent(
     state: DeviceListViewState,
     onStartScanning: () -> Unit,
-    onStopScanning: () -> Unit
+    onStopScanning: () -> Unit,
+    onClickConnect: (BluetoothDevice) -> Unit
 ) {
-    //LoadingDialog(isLoading = state.isScanning)
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             MyTopBar(title = "Devices")
         }
     ) {
-        Column(modifier = Modifier.padding(top = it.calculateTopPadding()).padding(10.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(top = it.calculateTopPadding())
+                .padding(10.dp)
+        ) {
             Row(
                 verticalAlignment = Alignment.Bottom,
             ) {
@@ -69,7 +78,11 @@ fun DeviceListScreenContent(
                 modifier = Modifier.padding(top = 10.dp)
             ) {
                 items(state.devices) { device ->
-                    DeviceItem(device, modifier = Modifier.fillMaxWidth())
+                    DeviceItem(
+                        device = device,
+                        onClickConnect = { onClickConnect(device) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
                     Spacer(modifier = Modifier.height(10.dp))
                 }
             }

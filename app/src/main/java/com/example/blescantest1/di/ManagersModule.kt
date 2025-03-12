@@ -1,6 +1,8 @@
 package com.example.blescantest1.di
 
+import com.example.blescantest1.remotecontrol.data.manager.BluetoothConnectionManagerImpl
 import com.example.blescantest1.remotecontrol.data.manager.BluetoothScanManagerImpl
+import com.example.blescantest1.remotecontrol.domain.manager.BluetoothConnectionManager
 import com.example.blescantest1.remotecontrol.domain.manager.BluetoothScanManager
 import dagger.Binds
 import dagger.Module
@@ -13,6 +15,10 @@ import javax.inject.Singleton
 abstract class ManagersModule {
     @Binds
     @Singleton
-    abstract fun bindBluetoothScanManager(impl: BluetoothScanManagerImpl) : BluetoothScanManager
+    abstract fun bindBluetoothScanManager(impl: BluetoothScanManagerImpl): BluetoothScanManager
+
+    @Binds
+    @Singleton
+    abstract fun bindBluetoothConnectManager(impl: BluetoothConnectionManagerImpl): BluetoothConnectionManager
 
 }
