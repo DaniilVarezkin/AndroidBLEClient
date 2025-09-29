@@ -1,6 +1,7 @@
 package com.example.blescantest1.remotecontrol.presentation.device_list
 
 import android.bluetooth.BluetoothDevice
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.blescantest1.remotecontrol.domain.manager.BluetoothConnectionManager
@@ -25,17 +26,21 @@ class DeviceListViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
+        Log.d("DEVICES SCREEN", "Логииииииииииииииииииииииииииииииииииииии")
         observeState()
     }
 
     fun startScanning() {
+        Log.w("DEVICES SCREEN", "Логииииииииииииииииииииииииииииииииииииии")
         scanManager.startScanning()
     }
 
     fun stopScanning() {
+        Log.e("DEVICES SCREEN", "Логииииииииииииииииииииииииииииииииииииии")
         scanManager.stopScanning()
     }
 
+    //TODO Убрать подключение здесь, перенести его на экран конкретного кстройсва, а здесь передаётся MAC адресс
     fun connectDevice(device: BluetoothDevice){
 
         connectManager.connectToDevice(device)

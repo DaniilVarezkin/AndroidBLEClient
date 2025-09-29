@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothGattService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-abstract class BLEDeviceConnection {
+abstract class AbstractBLEDeviceConnection {
     protected val _isConnected = MutableStateFlow(false)
     val isConnected = _isConnected.asStateFlow()
 

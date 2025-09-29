@@ -5,6 +5,8 @@ plugins {
 
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 hilt {
@@ -67,6 +69,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
@@ -74,4 +79,5 @@ dependencies {
 
     implementation(libs.arrow.core)
     implementation(libs.arrow.kt.arrow.fx.coroutines)
+
 }

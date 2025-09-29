@@ -9,8 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.blescantest1.remotecontrol.presentation.util.permissions.PermissionManager
 import com.example.blescantest1.remotecontrol.presentation.device_list.DeviceListScreen
-import com.example.blescantest1.screens.PermissionScreen
-
+import com.example.blescantest1.remotecontrol.presentation.permissions.PermissionsScreen
 @SuppressLint("MissingPermission")
 @Composable
 fun MainNavigation() {
@@ -21,7 +20,7 @@ fun MainNavigation() {
     }
 
     if (!allPermissionsGranted) {
-        PermissionScreen {
+        PermissionsScreen {
             allPermissionsGranted = true
         }
     } else {

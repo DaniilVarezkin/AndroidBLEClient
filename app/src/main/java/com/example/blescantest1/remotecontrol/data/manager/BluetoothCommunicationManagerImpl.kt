@@ -1,18 +1,18 @@
 package com.example.blescantest1.remotecontrol.data.manager
 
-import com.example.blescantest1.remotecontrol.domain.model.BLEDeviceConnection
+import com.example.blescantest1.remotecontrol.domain.model.AbstractBLEDeviceConnection
 import com.example.blescantest1.remotecontrol.domain.manager.BluetoothCommunicationManager
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class BluetoothCommunicationManagerImpl @Inject constructor() : BluetoothCommunicationManager {
-    override fun writeData(connection: BLEDeviceConnection, data: ByteArray) {
+    override fun writeData(connection: AbstractBLEDeviceConnection, data: ByteArray) {
         if(connection.isConnected.value){
             connection.writeData(data)
         }
     }
 
-    override fun getDataFlow(connection: BLEDeviceConnection): StateFlow<ByteArray?> {
+    override fun getDataFlow(connection: AbstractBLEDeviceConnection): StateFlow<ByteArray?> {
         return connection.characteristicData
     }
 }

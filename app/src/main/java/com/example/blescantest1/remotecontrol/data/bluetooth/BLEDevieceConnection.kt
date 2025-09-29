@@ -9,7 +9,7 @@ import android.bluetooth.BluetoothGattDescriptor
 import android.content.Context
 import android.util.Log
 import androidx.annotation.RequiresPermission
-import com.example.blescantest1.remotecontrol.domain.model.BLEDeviceConnection
+import com.example.blescantest1.remotecontrol.domain.model.AbstractBLEDeviceConnection
 import com.example.blescantest1.util.constants.BluetoothConstants
 import com.example.blescantest1.util.constants.PermissionConstants
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,8 +19,8 @@ import kotlinx.coroutines.flow.update
 class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT) constructor(
     private val context: Context,
     private val bluetoothDevice: BluetoothDevice
-) : BLEDeviceConnection() {
-    //TODO добавить тег для логов
+) : AbstractBLEDeviceConnection() {
+    private val TAG = "BLEDeviceConnection"
     val successfulWritesCount = MutableStateFlow(0)
 
     private val callback = object : BluetoothGattCallback() {
@@ -42,7 +42,7 @@ class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION
                 _services.value = gatt.services
                 enableNotifications() // Включаем подписку на обновления
             } else {
-                Log.e("bluetooth1", "Service discovery failed with status: $status")
+                Log.e(TAG, "Service discovery failed with status: $status")
             }
         }
 
@@ -60,7 +60,7 @@ class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION
                     _characteristicData.value = value
                 }
             } else {
-                Log.e("bluetooth1", "Deprecated onCharacteristicRead failed with status: $status")
+                Log.e(TAG, "Deprecated onCharacteristicRead failed with status: $status")
             }
         }
 
@@ -70,7 +70,7 @@ class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION
             status: Int
         ) {
             super.onCharacteristicWrite(gatt, characteristic, status)
-            Log.d("bluetooth1", "onCharacteristicWrite: ${characteristic.uuid}")
+            Log.d(TAG, "onCharacteristicWrite: ${characteristic.uuid}")
             if (characteristic.uuid == BluetoothConstants.CUSTOM_CHARACTERISTIC_UUID) {
                 successfulWritesCount.update { it + 1 }
             }
@@ -97,13 +97,13 @@ class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION
             service?.getCharacteristic(BluetoothConstants.CUSTOM_CHARACTERISTIC_UUID)
 
         if (characteristic == null) {
-            Log.e("bluetooth1", "Characteristic not found!")
+            Log.e(TAG, "Характеристики устройства не найдены")
             return
         }
 
         // Проверяем, поддерживает ли характеристика Notifications
         if (characteristic.properties and BluetoothGattCharacteristic.PROPERTY_NOTIFY == 0) {
-            Log.e("bluetooth1", "Characteristic does not support notifications!")
+            Log.e(TAG, "Characteristic does not support notifications!")
             return
         }
 
@@ -114,7 +114,7 @@ class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION
             descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
             gatt?.writeDescriptor(descriptor)
         } else {
-            Log.e("bluetooth1", "Descriptor not found!")
+            Log.e(TAG, "Descriptor not found!")
         }
     }
 
@@ -129,13 +129,13 @@ class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION
     @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
     override fun connect() {
         gatt = bluetoothDevice.connectGatt(context, false, callback)
-        Log.d("bluetooth1", "connectGatt")
+        Log.d(TAG, "connectGatt")
     }
 
     @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
     fun discoverServices() {
         gatt?.discoverServices()
-        Log.d("bluetooth1", "discoverServices")
+        Log.d(TAG, "discoverServices")
     }
 
     @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
@@ -144,9 +144,9 @@ class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION
         val characteristic =
             service?.getCharacteristic(BluetoothConstants.CUSTOM_CHARACTERISTIC_UUID)
         if (characteristic != null) {
-            characteristic.value = data;
+            characteristic.value = data
             val success = gatt?.writeCharacteristic(characteristic)
-            Log.d("bluetooth1", "Write data status: $success")
+            Log.d(TAG, "Write data status: $success")
         }
     }
 
@@ -157,11 +157,11 @@ class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION
             service?.getCharacteristic(BluetoothConstants.CUSTOM_CHARACTERISTIC_UUID)
         if (characteristic != null) {
             if (characteristic.properties.and(BluetoothGattCharacteristic.PROPERTY_READ) == 0) {
-                Log.e("bluetooth1", "Characteristic is not readable!")
+                Log.e(TAG, "Characteristic is not readable!")
                 return
             }
             val success = gatt?.readCharacteristic(characteristic)
-            Log.d("bluetooth1", "Read data status: $success")
+            Log.d(TAG, "Read data status: $success")
         }
     }
 }

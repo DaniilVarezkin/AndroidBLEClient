@@ -50,7 +50,7 @@ fun DeviceListScreenContent(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            MyTopBar(title = "Devices")
+            MyTopBar(title = "Устройства")
         }
     ) {
         Column(
@@ -63,12 +63,12 @@ fun DeviceListScreenContent(
             ) {
                 if (state.isScanning) {
                     Button(onClick = onStopScanning) {
-                        Text("Stop scanning")
+                        Text("Остановить сканирование")
                     }
                     Text("Сканирование...", Modifier.padding(horizontal = 10.dp))
                 } else {
                     Button(onClick = onStartScanning) {
-                        Text("Start scanning")
+                        Text("Начать сканирование")
                     }
 
                 }
@@ -80,6 +80,7 @@ fun DeviceListScreenContent(
                 items(state.devices) { device ->
                     DeviceItem(
                         device = device,
+                        //TODO Убрать подключение здесь, перенести его на экран конкретного кстройсва, а здесь передаётся MAC адресс
                         onClickConnect = { onClickConnect(device) },
                         modifier = Modifier.fillMaxWidth()
                     )

@@ -1,6 +1,7 @@
 package com.example.blescantest1.remotecontrol.data.manager
 
 import android.bluetooth.BluetoothDevice
+import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.example.blescantest1.remotecontrol.data.bluetooth.BLEScanner
 import com.example.blescantest1.remotecontrol.domain.manager.BluetoothScanManager
@@ -23,7 +24,7 @@ class BluetoothScanManagerImpl @Inject constructor(
     private val externalScope: CoroutineScope,
     private val scanner: BLEScanner,
 ) : BluetoothScanManager {
-
+    private val TAG = "BluetoothScanManager"
     private val _foundedDevicesMap = MutableStateFlow(emptyMap<String, BluetoothDevice>())
     private var collectDevicesJob: Job? = null
 
@@ -33,6 +34,8 @@ class BluetoothScanManagerImpl @Inject constructor(
 
     @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_SCAN)
     override fun startScanning() {
+        Log.d(TAG, "Начато сканирование")
+
         _foundedDevicesMap.value = emptyMap()
         scanner.startScanning()
         collectDevicesJob?.cancel()
@@ -41,11 +44,14 @@ class BluetoothScanManagerImpl @Inject constructor(
 
     @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_SCAN)
     override fun stopScanning() {
+        Log.d(TAG, "Сканирование завершено")
+
         scanner.stopScanning()
         collectDevicesJob?.cancel()
     }
 
     override fun getScanningState(): StateFlow<Boolean> {
+        Log.e(TAG, "Сканирование включено: ${scanner.isScanning}}")
         return scanner.isScanning
     }
 

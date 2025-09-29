@@ -1,5 +1,6 @@
-package com.example.blescantest1.screens
+package com.example.blescantest1.remotecontrol.presentation.permissions
 
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -12,14 +13,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.blescantest1.remotecontrol.presentation.util.permissions.PermissionManager
 
+const val SCREEN_TAG = "Screen tag"
 @Composable
-fun PermissionScreen(
+fun PermissionsScreen(
     onPermissionGranted: ()->Unit
 ) {
+    PermissionsScreenContent(onPermissionGranted)
+}
+
+@Composable
+fun PermissionsScreenContent(
+    onPermissionGranted: () -> Unit
+){
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { granted ->
         if (granted.values.all { it }) {
+            Log.d(SCREEN_TAG, "Разрешения получены")
             onPermissionGranted()
         }
     }
@@ -34,7 +44,7 @@ fun PermissionScreen(
         ) {
 
             Button(onClick = { launcher.launch(PermissionManager.ALL_BLE_PERMISSIONS) }) {
-                Text("Grant Permission")
+                Text("Выдать разрешения")
             }
         }
     }
