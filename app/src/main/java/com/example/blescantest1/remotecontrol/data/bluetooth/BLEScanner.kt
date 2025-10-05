@@ -1,49 +1,44 @@
 package com.example.blescantest1.remotecontrol.data.bluetooth
 
 import android.Manifest
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothManager
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
-import android.content.Context
 import android.util.Log
 import androidx.annotation.RequiresPermission
-import com.example.blescantest1.util.constants.BluetoothConstants
-import com.example.blescantest1.util.constants.PermissionConstants
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
+import java.util.UUID
 import javax.inject.Inject
 
 
-
-class BLEScanner @Inject constructor(@ApplicationContext context: Context) {
+class BLEScanner @Inject constructor(
+    private val bluetoothAdapter: BluetoothAdapter
+) {
 
     private val TAG = "BLEScanner"
-
-    private val bluetooth = context.getSystemService(Context.BLUETOOTH_SERVICE)
-            as? BluetoothManager
-        ?: throw Exception("Bluetooth is not supported by this device")
 
     private val _isScanning = MutableStateFlow(false)
     val isScanning = _isScanning.asStateFlow()
 
-    private val _foundDeviceChannel = Channel<BluetoothDevice>()
-    val foundDeviceFlow = _foundDeviceChannel.receiveAsFlow()
+    private val _foundDeviceChannel = MutableSharedFlow<BluetoothDevice>(replay = 1)
+    val foundDeviceFlow = _foundDeviceChannel.asSharedFlow()
 
     private val scanner: BluetoothLeScanner
-        get() = bluetooth.adapter.bluetoothLeScanner
+        get() = bluetoothAdapter.bluetoothLeScanner
 
     private val scanCallback = object : ScanCallback() {
+        @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
             result ?: return
 
-            _foundDeviceChannel.trySend(result.device)
-            Log.v(TAG, "Найдено устройство ${result.device.address}")
+            _foundDeviceChannel.tryEmit(result.device)
+            Log.i(TAG, "Найдено устройство: ${result.device.name},  ${result.device.address}")
 
         }
 
@@ -60,11 +55,24 @@ class BLEScanner @Inject constructor(@ApplicationContext context: Context) {
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
-    fun startScanning() {
-        scanner.startScan(scanCallback)
+    fun startScanning(serviceUuid: UUID? = null) {
+        val filters = if (serviceUuid == null)
+            emptyList() else {
+            listOf(
+                android.bluetooth.le.ScanFilter.Builder()
+                    .setServiceUuid(android.os.ParcelUuid(serviceUuid))
+                    .build()
+            )
+        }
+
+        val settings = android.bluetooth.le.ScanSettings.Builder()
+            .setScanMode(android.bluetooth.le.ScanSettings.SCAN_MODE_BALANCED)
+            .build()
+
+        scanner.startScan(filters, settings, scanCallback)
         _isScanning.value = true
 
-        Log.i(TAG, "startScanning")
+        Log.i(TAG, "startScanning (filter: $serviceUuid)")
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)

@@ -26,5 +26,4 @@ abstract class ManagersModule {
     @Binds
     @Singleton
     abstract fun bindBluetoothCommunicationManager(impl: BluetoothCommunicationManagerImpl): BluetoothCommunicationManager
-
 }

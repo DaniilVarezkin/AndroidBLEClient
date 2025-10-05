@@ -8,6 +8,6 @@ import javax.inject.Inject
 class GetFoundDeviceFlow @Inject constructor(private val bluetoothRepository: BluetoothScanManager) {
 
     operator fun invoke(): Flow<List<BluetoothDevice>> {
-        return bluetoothRepository.getFoundedDevicesFlow()
+        return bluetoothRepository.getFoundDevicesFlow()
     }
 }

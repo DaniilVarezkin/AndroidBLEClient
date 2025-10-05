@@ -5,8 +5,8 @@ import com.example.blescantest1.remotecontrol.domain.model.AbstractBLEDeviceConn
 import kotlinx.coroutines.flow.StateFlow
 
 interface BluetoothConnectionManager {
-    //TODO Пересмотреть использование чистого BLEDeviceConnection, возможно вернуть StateFlow
     fun connectToDevice(device: BluetoothDevice) : StateFlow<AbstractBLEDeviceConnection?>
+    fun connectToDevice(address: String) : StateFlow<AbstractBLEDeviceConnection?>
     fun disconnectDevice()
     fun getDeviceConnection() : StateFlow<AbstractBLEDeviceConnection?>
 }

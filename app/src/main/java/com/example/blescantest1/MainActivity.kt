@@ -19,6 +19,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+
             BleScanTest1Theme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()

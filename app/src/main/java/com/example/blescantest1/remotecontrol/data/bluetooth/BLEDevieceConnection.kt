@@ -16,9 +16,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
 @Suppress("DEPRECATION")
-class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT) constructor(
+
+class BLEDeviceConnectionImpl
+@RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
+constructor(
     private val context: Context,
-    private val bluetoothDevice: BluetoothDevice
+    val bluetoothDevice: BluetoothDevice
 ) : AbstractBLEDeviceConnection() {
     private val TAG = "BLEDeviceConnection"
     val successfulWritesCount = MutableStateFlow(0)
@@ -40,7 +43,7 @@ class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION
             super.onServicesDiscovered(gatt, status)
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 _services.value = gatt.services
-                enableNotifications() // Включаем подписку на обновления
+                this@BLEDeviceConnectionImpl.enableNotifications() // Включаем подписку на обновления
             } else {
                 Log.e(TAG, "Service discovery failed with status: $status")
             }
@@ -90,6 +93,84 @@ class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION
 
     private var gatt: BluetoothGatt? = null
 
+    /**
+     * Подключается к удалённому BLE-устройству.
+     *
+     * @throws SecurityException если отсутствует разрешение BLUETOOTH_CONNECT
+     */
+    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
+    override fun connect() {
+        gatt = bluetoothDevice.connectGatt(context, false, callback)
+        Log.d(TAG, "connectGatt")
+    }
+
+    /**
+     * Отключается от BLE-устройства и освобождает ресурсы.
+     *
+     * @throws SecurityException если отсутствует разрешение BLUETOOTH_CONNECT
+     */
+    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
+    override fun disconnect() {
+        gatt?.disconnect()
+        gatt?.close()
+        gatt = null
+    }
+
+    /**
+     * Запускает процесс обнаружения сервисов на подключённом BLE-устройстве.
+     *
+     * @throws SecurityException если отсутствует разрешение BLUETOOTH_CONNECT
+     */
+    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
+    fun discoverServices() {
+        gatt?.discoverServices()
+        Log.d(TAG, "discoverServices")
+    }
+
+    /**
+     * Читает значение характеристики [BluetoothConstants.CUSTOM_CHARACTERISTIC_UUID].
+     *
+     * @throws SecurityException если отсутствует разрешение BLUETOOTH_CONNECT
+     */
+    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
+    override fun readData() {
+        val service = gatt?.getService(BluetoothConstants.CTF_SERVICE_UUID)
+        val characteristic =
+            service?.getCharacteristic(BluetoothConstants.CUSTOM_CHARACTERISTIC_UUID)
+        if (characteristic != null) {
+            if (characteristic.properties.and(BluetoothGattCharacteristic.PROPERTY_READ) == 0) {
+                Log.e(TAG, "Необходимые характеристики не найдены")
+                return
+            }
+            val success = gatt?.readCharacteristic(characteristic)
+            Log.d(TAG, "Read data status: $success")
+        }
+    }
+
+    /**
+     * Записывает данные в характеристику [BluetoothConstants.CUSTOM_CHARACTERISTIC_UUID].
+     *
+     * @param data байтовый массив с данными для записи
+     * @throws SecurityException если отсутствует разрешение BLUETOOTH_CONNECT
+     */
+    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
+    override fun writeData(data: ByteArray) {
+        val service = gatt?.getService(BluetoothConstants.CTF_SERVICE_UUID)
+        val characteristic =
+            service?.getCharacteristic(BluetoothConstants.CUSTOM_CHARACTERISTIC_UUID)
+        if (characteristic != null) {
+            characteristic.value = data
+            val success = gatt?.writeCharacteristic(characteristic)
+            Log.d(TAG, "Write data status: $success")
+        }
+    }
+
+    /**
+     * Включает уведомления для характеристики [BluetoothConstants.CUSTOM_CHARACTERISTIC_UUID].
+     * Это позволяет получать события при изменении значения характеристики на устройстве.
+     *
+     * @throws SecurityException если отсутствует разрешение BLUETOOTH_CONNECT
+     */
     @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
     fun enableNotifications() {
         val service = gatt?.getService(BluetoothConstants.CTF_SERVICE_UUID)
@@ -115,53 +196,6 @@ class BLEDeviceConnectionImpl @RequiresPermission(PermissionConstants.PERMISSION
             gatt?.writeDescriptor(descriptor)
         } else {
             Log.e(TAG, "Descriptor not found!")
-        }
-    }
-
-
-    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
-    override fun disconnect() {
-        gatt?.disconnect()
-        gatt?.close()
-        gatt = null
-    }
-
-    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
-    override fun connect() {
-        gatt = bluetoothDevice.connectGatt(context, false, callback)
-        Log.d(TAG, "connectGatt")
-    }
-
-    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
-    fun discoverServices() {
-        gatt?.discoverServices()
-        Log.d(TAG, "discoverServices")
-    }
-
-    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
-    override fun writeData(data: ByteArray) {
-        val service = gatt?.getService(BluetoothConstants.CTF_SERVICE_UUID)
-        val characteristic =
-            service?.getCharacteristic(BluetoothConstants.CUSTOM_CHARACTERISTIC_UUID)
-        if (characteristic != null) {
-            characteristic.value = data
-            val success = gatt?.writeCharacteristic(characteristic)
-            Log.d(TAG, "Write data status: $success")
-        }
-    }
-
-    @RequiresPermission(PermissionConstants.PERMISSION_BLUETOOTH_CONNECT)
-    override fun readData() {
-        val service = gatt?.getService(BluetoothConstants.CTF_SERVICE_UUID)
-        val characteristic =
-            service?.getCharacteristic(BluetoothConstants.CUSTOM_CHARACTERISTIC_UUID)
-        if (characteristic != null) {
-            if (characteristic.properties.and(BluetoothGattCharacteristic.PROPERTY_READ) == 0) {
-                Log.e(TAG, "Characteristic is not readable!")
-                return
-            }
-            val success = gatt?.readCharacteristic(characteristic)
-            Log.d(TAG, "Read data status: $success")
         }
     }
 }

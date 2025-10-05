@@ -15,20 +15,28 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.blescantest1.remotecontrol.presentation.device_list.components.DeviceItem
 import com.example.blescantest1.remotecontrol.presentation.util.components.MyTopBar
 
 
 @Composable
 internal fun DeviceListScreen(
+    navController: NavController,
     viewModel: DeviceListViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.navigation.collect { route ->
+            navController.navigate(route)
+        }
+    }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     DeviceListScreenContent(
