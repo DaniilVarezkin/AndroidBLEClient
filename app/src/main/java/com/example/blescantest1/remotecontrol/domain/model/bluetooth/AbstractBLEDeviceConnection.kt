@@ -1,5 +1,6 @@
-package com.example.blescantest1.remotecontrol.domain.model
+package com.example.blescantest1.remotecontrol.domain.model.bluetooth
 
+import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGattService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,6 +17,8 @@ abstract class AbstractBLEDeviceConnection {
 
     abstract fun connect()
     abstract fun disconnect()
+    abstract fun getDevice(): BluetoothDevice
     abstract fun readData()
     abstract fun writeData(data: ByteArray)
+    abstract fun sendMessage(message: String)
 }

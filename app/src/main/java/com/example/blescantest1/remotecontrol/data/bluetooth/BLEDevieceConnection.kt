@@ -1,5 +1,6 @@
 package com.example.blescantest1.remotecontrol.data.bluetooth
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
@@ -9,7 +10,7 @@ import android.bluetooth.BluetoothGattDescriptor
 import android.content.Context
 import android.util.Log
 import androidx.annotation.RequiresPermission
-import com.example.blescantest1.remotecontrol.domain.model.AbstractBLEDeviceConnection
+import com.example.blescantest1.remotecontrol.domain.model.bluetooth.AbstractBLEDeviceConnection
 import com.example.blescantest1.util.constants.BluetoothConstants
 import com.example.blescantest1.util.constants.PermissionConstants
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -116,6 +117,10 @@ constructor(
         gatt = null
     }
 
+    override fun getDevice(): BluetoothDevice {
+        return bluetoothDevice
+    }
+
     /**
      * Запускает процесс обнаружения сервисов на подключённом BLE-устройстве.
      *
@@ -163,6 +168,11 @@ constructor(
             val success = gatt?.writeCharacteristic(characteristic)
             Log.d(TAG, "Write data status: $success")
         }
+    }
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+    override fun sendMessage(message: String) {
+        writeData(message.toByteArray(Charsets.US_ASCII))
     }
 
     /**

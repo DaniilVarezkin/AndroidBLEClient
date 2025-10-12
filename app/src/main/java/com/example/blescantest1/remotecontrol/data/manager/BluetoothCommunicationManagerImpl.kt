@@ -1,6 +1,6 @@
 package com.example.blescantest1.remotecontrol.data.manager
 
-import com.example.blescantest1.remotecontrol.domain.model.AbstractBLEDeviceConnection
+import com.example.blescantest1.remotecontrol.domain.model.bluetooth.AbstractBLEDeviceConnection
 import com.example.blescantest1.remotecontrol.domain.manager.BluetoothCommunicationManager
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject

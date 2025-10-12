@@ -1,4 +1,4 @@
-package com.example.blescantest1.remotecontrol.domain.model
+package com.example.blescantest1.remotecontrol.domain.model.bluetooth
 
 data class BluetoothError(
     val error: BluetoothErrors,

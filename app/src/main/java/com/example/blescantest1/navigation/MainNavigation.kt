@@ -28,8 +28,9 @@ fun MainNavigation() {
     val navController = rememberNavController()
 
     val context = LocalContext.current
+    val permissionManager = PermissionManager(context)
     var allPermissionsGranted by remember {
-        mutableStateOf(PermissionManager.haveAllPermissions(context))
+        mutableStateOf(permissionManager.haveAllPermissions())
     }
 
     Log.d("MainNavigation", "Разрешения выданы: $allPermissionsGranted")

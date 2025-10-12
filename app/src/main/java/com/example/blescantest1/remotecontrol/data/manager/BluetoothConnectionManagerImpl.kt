@@ -6,7 +6,7 @@ import android.content.Context
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.example.blescantest1.remotecontrol.data.bluetooth.BLEDeviceConnectionImpl
-import com.example.blescantest1.remotecontrol.domain.model.AbstractBLEDeviceConnection
+import com.example.blescantest1.remotecontrol.domain.model.bluetooth.AbstractBLEDeviceConnection
 import com.example.blescantest1.remotecontrol.domain.manager.BluetoothConnectionManager
 import com.example.blescantest1.util.constants.PermissionConstants
 import dagger.hilt.android.qualifiers.ApplicationContext

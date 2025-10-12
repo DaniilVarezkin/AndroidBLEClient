@@ -80,4 +80,11 @@ dependencies {
     implementation(libs.arrow.core)
     implementation(libs.arrow.kt.arrow.fx.coroutines)
 
+
+    //Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation (libs.androidx.runtime.livedata)
+    ksp(libs.androidx.room.room.compiler)
+
 }
